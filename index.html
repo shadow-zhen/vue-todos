@@ -10,43 +10,35 @@
 		<link rel="stylesheet" href="css/app.css">
 	</head>
 	<body>
-		<section class="todoapp">
+		<section class="todoapp" id="todoapp">
 			<!-- 头部 -->
 			<header class="header">
 				<h1>todos</h1>
-				<input class="new-todo" placeholder="What needs to be done?" autofocus>
+				<input class="new-todo" placeholder="What needs to be done?" v-model="todoName" @keyup.enter="addTodo" autofocus>
 			</header>
 
 			<!-- 主体 -->
 			<section class="main">
-				<input id="toggle-all" class="toggle-all" type="checkbox">
+				<input id="toggle-all" class="toggle-all" type="checkbox" v-model="isCheckedAll">
 				<label for="toggle-all">Mark all as complete</label>
 				<ul class="todo-list">
 					<!-- These are here just to show the structure of the list items -->
 					<!-- List items should get the class `editing` when editing and `completed` when marked as completed -->
-					<li class="completed">
+					<li :class="{completed: todo.state, editing: now === todo.id}" v-for="todo in todos" :key="todo.id">
 						<div class="view">
-							<input class="toggle" type="checkbox" checked>
-							<label>Taste JavaScript</label>
-							<button class="destroy"></button>
+							<input class="toggle" type="checkbox" v-model="todo.state">
+							<label @dblclick="showEdit(todo.id)">{{ todo.name }}</label>
+							<button class="destroy" @click="delTodo(todo.id)"></button>
 						</div>
-						<input class="edit" value="Create a TodoMVC template">
-					</li>
-					<li>
-						<div class="view">
-							<input class="toggle" type="checkbox">
-							<label>Buy a unicorn</label>
-							<button class="destroy"></button>
-						</div>
-						<input class="edit" value="Rule the web">
+						<input class="edit" v-model="todo.name" @keyup.enter="hideEdit">
 					</li>
 				</ul>
 			</section>
 
 			<!-- 底部 -->
-			<footer class="footer">
+			<footer class="footer" v-show="isShowFooter">
 				<!-- This should be `0 items left` by default -->
-				<span class="todo-count"><strong>0</strong> item left</span>
+				<span class="todo-count"><strong>{{ leftCount }}</strong> item left</span>
 				<!-- Remove this if you don't implement routing -->
 				<ul class="filters">
 					<li>
@@ -60,7 +52,7 @@
 					</li>
 				</ul>
 				<!-- Hidden if no completed items are left ↓ -->
-				<button class="clear-completed">Clear completed</button>
+				<button class="clear-completed" v-show="isShowClear" @click="clearCompleted">Clear completed</button>
 			</footer>
 		</section>
 
