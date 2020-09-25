@@ -5,6 +5,7 @@
     data: {
       todoName: '',
       todos: JSON.parse(localStorage.getItem('todos')) || [],
+      todosCopy: [],
       now: -1
     },
     methods: {
@@ -34,6 +35,21 @@
       //点击清除已完成，则清除已完成
       clearCompleted () {
         this.todos = this.todos.filter(item => !item.state)
+        this.todosCopy = this.todos
+      },
+      //选择全部
+      selctAll () {
+        this.todos = this.todosCopy
+      },
+      //选择未完成的
+      selectActive () {
+        if(!this.todosCopy.filter(item => !item.state).length) return
+        this.todos = this.todosCopy.filter(item => !item.state)
+      },
+      //选择已完成
+      selectCompleted () {
+        if(!this.todosCopy.filter(item => item.state).length) return
+        this.todos = this.todosCopy.filter(item => item.state)
       }
     },
     computed: {
@@ -72,6 +88,9 @@
           localStorage.setItem('todos', JSON.stringify(newVal))
         }
       }
+    },
+    created () {
+      this.todosCopy = this.todos 
     }
   })
 })()

@@ -42,13 +42,13 @@
 				<!-- Remove this if you don't implement routing -->
 				<ul class="filters">
 					<li>
-						<a class="selected" href="#/">All</a>
+						<a class="selected" href="#/" @click="selctAll">All</a>
 					</li>
 					<li>
-						<a href="#/active">Active</a>
+						<a href="#/active" @click="selectActive">Active</a>
 					</li>
 					<li>
-						<a href="#/completed">Completed</a>
+						<a href="#/completed" @click="selectCompleted">Completed</a>
 					</li>
 				</ul>
 				<!-- Hidden if no completed items are left ↓ -->
